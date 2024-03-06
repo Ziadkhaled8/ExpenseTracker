@@ -1,5 +1,6 @@
 using ExpenseTracker.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseTracker
 {
@@ -12,8 +13,12 @@ namespace ExpenseTracker
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddRazorPages();
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>();
 
             //Register Syncfusion license
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhKYVtpR2Nbe055fldEal1YVAciSV9jS3pTdUViWXZccnVcTmhcUw==");
@@ -34,6 +39,8 @@ namespace ExpenseTracker
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=DashBoard}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
 
             app.Run();
         }

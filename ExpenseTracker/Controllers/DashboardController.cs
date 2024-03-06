@@ -1,11 +1,13 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace ExpenseTracker.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -78,7 +80,7 @@ namespace ExpenseTracker.Controllers
             ViewBag.SplineChartData = from day in Last7Days
                                       join income in IncomeSummary on day equals income.day into dayIncomeJoined
                                       from income in dayIncomeJoined.DefaultIfEmpty()
-                                      join expense in IncomeSummary on day equals expense.day into dayExpenseJoined
+                                      join expense in ExpenseSummary on day equals expense.day into dayExpenseJoined
                                       from expense in dayExpenseJoined.DefaultIfEmpty()
                                       select new
                                       {
